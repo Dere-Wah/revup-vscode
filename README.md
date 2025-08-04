@@ -28,12 +28,12 @@ to set up the core tool first.
 
 <img width="747" height="327" alt="image" src="https://github.com/user-attachments/assets/d8ff55c1-747d-4587-b88e-5918926b72b2" />
 
-
 -   Automatically templates your COMMIT_EDITMSG file when creating a new commit
 -   Adds the current topic and relative key ready to use
 -   Displays all active topics in your repository for reference
 
 ### 3. Commit Message Auto-completion
+
 ![auto](https://github.com/user-attachments/assets/875e5e5b-a26d-423d-9784-427514fe0fb7)
 
 -   Intelligent auto-completion for commit messages
@@ -81,8 +81,6 @@ The following features are currently being worked on:
 
 -   **Auto Installation**: Automatic installation of revup during extension
     setup
--   **Optimized Topic Tracking**: Enhanced topic tracking implementation without
-    relying on terminal commands for autocompletion
 -   **VSCode Settings Integration**: Improved configuration interface that
     integrates seamlessly with VSCode's native settings system
 -   **Extended Revup Features**: Additional functionality beyond the basic

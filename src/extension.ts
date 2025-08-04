@@ -9,8 +9,10 @@ import {
 import { StatusBar } from "./StatusBar";
 import { registerRevupProviders } from "./providers";
 import { activateFileWatcher } from "./fileSystemWatcher";
+import { TopicsWatcher } from "./topicsWatcher";
 
 let revupStatusBarItem: StatusBar;
+let topicsWatcher: TopicsWatcher;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -27,10 +29,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	revupStatusBarItem = new StatusBar();
 
-	// Activate the commit message file watcher
-	activateFileWatcher(context);
+	topicsWatcher = new TopicsWatcher();
 
-	registerRevupProviders();
+	registerRevupProviders(topicsWatcher.getTopics.bind(topicsWatcher));
+
+	// Activate the commit message file watcher
+	activateFileWatcher(context, topicsWatcher.getTopics.bind(topicsWatcher));
 
 	context.subscriptions.push(revupStatusBarItem);
 	context.subscriptions.push(
