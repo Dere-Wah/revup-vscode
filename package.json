@@ -116,60 +116,6 @@
         "title": "Revup: Revup Upload",
         "icon": "$(cloud-upload)"
       }
-    ],
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "revup",
-          "title": "Revup",
-          "icon": "$(cloud-upload)"
-        }
-      ]
-    },
-    "views": {
-      "revup": [{
-        "id": "revupTopics",
-        "name": "Revup Topics",
-        "icon": "$(cloud-upload)",
-        "contextualTitle": "Revup Topics"
-      }]
-    },
-    "menus": {
-      "view/item/context": [
-        {
-          "command": "revup.openConfig",
-          "group": "navigation",
-          "when": "view == revupTopics"
-        }
-      ],
-      "scm/resourceGroup/context": [
-        {
-          "command": "revup.openConfig",
-          "group": "inline@1",
-          "when": "scmProvider == git"
-        }
-      ],
-      "scm/resourceState/context": [
-        {
-          "command": "revup.openConfig",
-          "group": "inline@1",
-          "when": "scmProvider == git"
-        }
-      ],
-      "scm/inputBox": [
-        {
-          "command": "revup.openConfig",
-          "alt": "Topic Name",
-          "when ": "scmProvider == git"
-        }
-      ]
-    },
-    "viewsWelcome": [
-      {
-        "view": "revupTopics",
-        "when": "revup.topics.length > 0",
-        "content": "No topics found [learn more](https://www.npmjs.com/).\n[Create a Commit](command:git.commit)"
-      }
     ]
   },
   "scripts": {

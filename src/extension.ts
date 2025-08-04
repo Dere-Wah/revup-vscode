@@ -7,6 +7,8 @@ import {
 	registerRevupUploadCommand,
 } from "./commands";
 import { StatusBar } from "./StatusBar";
+import { registerRevupProviders } from "./providers";
+import { activateFileWatcher } from "./fileSystemWatcher";
 
 let revupStatusBarItem: StatusBar;
 
@@ -25,8 +27,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	revupStatusBarItem = new StatusBar();
 
-	context.subscriptions.push(revupStatusBarItem);
+	// Activate the commit message file watcher
+	activateFileWatcher(context);
 
+	registerRevupProviders();
+
+	context.subscriptions.push(revupStatusBarItem);
 	context.subscriptions.push(
 		vscode.window.onDidChangeActiveTextEditor(revupStatusBarItem.update)
 	);
