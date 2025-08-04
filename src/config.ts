@@ -17,8 +17,11 @@ export async function showConfig(repoConfig: boolean): Promise<void> {
 
 			// Check if workspace is a Git repository
 			const workspaceRoot =
-				vscode.workspace.workspaceFolders![0].uri.fsPath;
-			const isGitRepo = await isGitRepository(workspaceRoot);
+				vscode.workspace.workspaceFolders![0]?.uri.fsPath;
+			const isGitRepo =
+				workspaceRoot !== undefined
+					? await isGitRepository(workspaceRoot)
+					: false;
 			if (!isGitRepo) {
 				throw new Error(
 					"Current workspace is not a Git repository. Cannot create repository-specific config."
@@ -60,16 +63,15 @@ export async function showConfig(repoConfig: boolean): Promise<void> {
 				try {
 					// Run the initial configuration commands silently
 					const repoFlag = repoConfig ? " --repo" : "";
-					const githubUsername = await getGithubUsername();
 
 					// Execute commands silently
 					await runCommandSilently(
 						`revup config remote_name origin${repoFlag}`,
-						!repoConfig
+						{ global: !repoConfig }
 					);
 					await runCommandSilently(
 						`revup config main_branch main${repoFlag}`,
-						!repoConfig
+						{ global: !repoConfig }
 					);
 
 					// Try to open the file immediately since we await the commands

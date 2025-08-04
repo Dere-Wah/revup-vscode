@@ -9,7 +9,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -30,16 +32,7 @@
         "title": "Revup Upload",
         "icon": "$(cloud-upload)"
       }
-    ],
-    "menus": {
-      "scm/title": [
-        {
-          "command": "revup.upload",
-          "when": "scmProvider == git",
-          "group": "navigation"
-        }
-      ]
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",

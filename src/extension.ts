@@ -7,8 +7,9 @@ import {
 	registerOpenConfigCommand,
 	registerRevupUploadCommand,
 } from "./commands";
+import { StatusBar } from "./StatusBar";
 
-let revupStatusBarItem: vscode.StatusBarItem;
+let revupStatusBarItem: StatusBar;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -16,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log(
-		'Congratulations, your extension "revup-vscode" is now active!'
+		'Congratulations, your extension "revup-vscode" is now active!!!'
 	);
 
 	registerOAuthConfigCommand(context);
@@ -24,16 +25,20 @@ export function activate(context: vscode.ExtensionContext) {
 	registerOpenConfigCommand(context);
 	registerRevupUploadCommand(context);
 
-	revupStatusBarItem = vscode.window.createStatusBarItem(
-		vscode.StatusBarAlignment.Right,
-		100
-	);
-	revupStatusBarItem.command = "revup.upload";
-	revupStatusBarItem.text = "$(cloud) Upload";
-	revupStatusBarItem.tooltip = "Upload changes to Revup";
+	revupStatusBarItem = new StatusBar();
+
 	context.subscriptions.push(revupStatusBarItem);
-	revupStatusBarItem.show();
+
+	context.subscriptions.push(
+		vscode.window.onDidChangeActiveTextEditor(revupStatusBarItem.update)
+	);
+	context.subscriptions.push(
+		vscode.window.onDidChangeTextEditorSelection(revupStatusBarItem.update)
+	);
+	revupStatusBarItem.update();
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	console.log("Deactivating Revup VSCode extension");
+}

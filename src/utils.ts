@@ -1,40 +1,49 @@
-import { Uri, workspace, window, type TextDocument } from "vscode";
-import { RevupVSCodeConfig } from "./types";
+import * as vscode from "vscode";
 import { exec } from "child_process";
 import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
+type CommandExecutionOptions =
+	| { global: true; directory?: undefined }
+	| { global: false; directory?: string };
+
 /**
  * Executes a command silently (without showing a terminal)
  * @param command The command to execute
- * @param globalOrDirectory If true/undefined, executes globally. If false, executes in workspace directory. If string, executes in that directory.
+ * @param options Execution options: { global: true } for global execution, { global: false, directory?: string } for workspace execution (uses workspace root if directory not provided)
  * @returns Promise containing stdout and stderr
  */
 export async function runCommandSilently(
 	command: string,
-	globalOrDirectory: boolean | string = true
+	options: CommandExecutionOptions = { global: true }
 ): Promise<{ stdout: string; stderr: string }> {
 	try {
-		let options: { cwd?: string } | undefined;
+		let execOptions: { cwd?: string } | undefined;
 
-		if (typeof globalOrDirectory === "string") {
-			options = { cwd: globalOrDirectory };
-		} else if (!globalOrDirectory) {
-			if (
-				!workspace.workspaceFolders?.length ||
-				!workspace.workspaceFolders[0]
-			) {
-				throw new Error(
-					"No workspace is open. Cannot execute workspace-scoped command."
-				);
+		if (!options.global) {
+			if (options.directory) {
+				execOptions = { cwd: options.directory };
+			} else {
+				if (!vscode.workspace.workspaceFolders?.[0]?.uri) {
+					throw new Error("No workspace is open.");
+				}
+
+				if (
+					!vscode.workspace.workspaceFolders?.length ||
+					!vscode.workspace.workspaceFolders[0]
+				) {
+					throw new Error(
+						"No workspace is open. Cannot execute workspace-scoped command."
+					);
+				}
+				execOptions = {
+					cwd: vscode.workspace.workspaceFolders[0].uri.fsPath,
+				};
 			}
-			options = {
-				cwd: workspace.workspaceFolders[0].uri.fsPath,
-			};
 		}
 
-		const { stdout, stderr } = await execAsync(command, options);
+		const { stdout, stderr } = await execAsync(command, execOptions);
 		return {
 			stdout: stdout.toString(),
 			stderr: stderr.toString(),
@@ -53,31 +62,14 @@ export async function runCommandSilently(
  * @throws {Error} If no workspace is open
  */
 export function ensureWorkspaceExists(): void {
-	if (!workspace.workspaceFolders?.length || !workspace.workspaceFolders[0]) {
+	if (
+		!vscode.workspace.workspaceFolders?.length ||
+		!vscode.workspace.workspaceFolders[0]
+	) {
 		throw new Error(
 			"No workspace is open. Cannot access repository-specific config."
 		);
 	}
-}
-
-export function getConfig(scope?: TextDocument | Uri): RevupVSCodeConfig {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const config = workspace.getConfiguration(
-		"revup-vscode",
-		scope
-	) as unknown as RevupVSCodeConfig;
-
-	// Some settings are disabled for untrusted workspaces
-	// because they can be used for bad things.
-	if (!workspace.isTrusted) {
-		const newConfig = {
-			...config,
-			user: undefined,
-		};
-		return newConfig;
-	}
-
-	return config;
 }
 
 /**
@@ -87,11 +79,13 @@ export function getConfig(scope?: TextDocument | Uri): RevupVSCodeConfig {
  */
 export function getOrCreateTerminal(name: string) {
 	// Try to find an existing terminal with the given name
-	const existingTerminal = window.terminals.find((t) => t.name === name);
+	const existingTerminal = vscode.window.terminals.find(
+		(t) => t.name === name
+	);
 	if (existingTerminal) {
 		return existingTerminal;
 	}
 
 	// Create a new terminal if none exists
-	return window.createTerminal(name);
+	return vscode.window.createTerminal(name);
 }

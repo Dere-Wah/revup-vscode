@@ -48,7 +48,7 @@ export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
 					// Run the command silently
 					await runCommandSilently(
 						`revup config github_oauth ${value}`,
-						false
+						{ global: false }
 					);
 
 					// Show success message
@@ -95,7 +95,7 @@ export function registerGitUsernameConfigCommand(
 					// Run the command silently
 					await runCommandSilently(
 						`revup config github_username ${value}`,
-						false
+						{ global: false }
 					);
 
 					// Show success message
@@ -126,11 +126,8 @@ export function registerOpenConfigCommand(context: vscode.ExtensionContext) {
 				[
 					{
 						label: "User Configuration",
-						description: `Open User Revup configuration file (${
-							process.env.REVUP_CONFIG_PATH
-								? "$REVUP_CONFIG_PATH"
-								: "~/.revupconfig"
-						})`,
+						description:
+							"Open User Revup configuration file (~/.revupconfig)",
 					},
 					{
 						label: "Repo Configuration",
