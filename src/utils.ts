@@ -1,4 +1,4 @@
-import { Uri, workspace, type TextDocument } from "vscode";
+import { Uri, workspace, window, type TextDocument } from "vscode";
 import { RevupVSCodeConfig } from "./types";
 import { exec } from "child_process";
 import { promisify } from "util";
@@ -21,7 +21,10 @@ export async function runCommandSilently(
 		if (typeof globalOrDirectory === "string") {
 			options = { cwd: globalOrDirectory };
 		} else if (!globalOrDirectory) {
-			if (!workspace.workspaceFolders?.length) {
+			if (
+				!workspace.workspaceFolders?.length ||
+				!workspace.workspaceFolders[0]
+			) {
 				throw new Error(
 					"No workspace is open. Cannot execute workspace-scoped command."
 				);
@@ -50,7 +53,7 @@ export async function runCommandSilently(
  * @throws {Error} If no workspace is open
  */
 export function ensureWorkspaceExists(): void {
-	if (!workspace.workspaceFolders?.length) {
+	if (!workspace.workspaceFolders?.length || !workspace.workspaceFolders[0]) {
 		throw new Error(
 			"No workspace is open. Cannot access repository-specific config."
 		);
@@ -75,4 +78,20 @@ export function getConfig(scope?: TextDocument | Uri): RevupVSCodeConfig {
 	}
 
 	return config;
+}
+
+/**
+ * Creates a new terminal with the specified name or returns an existing one if it already exists
+ * @param name The name for the terminal
+ * @returns The terminal instance
+ */
+export function getOrCreateTerminal(name: string) {
+	// Try to find an existing terminal with the given name
+	const existingTerminal = window.terminals.find((t) => t.name === name);
+	if (existingTerminal) {
+		return existingTerminal;
+	}
+
+	// Create a new terminal if none exists
+	return window.createTerminal(name);
 }

@@ -24,8 +24,22 @@
       {
         "command": "revup.openConfig",
         "title": "Open Revup Configuration File"
+      },
+      {
+        "command": "revup.upload",
+        "title": "Revup Upload",
+        "icon": "$(cloud-upload)"
       }
-    ]
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "revup.upload",
+          "when": "scmProvider == git",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",

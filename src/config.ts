@@ -10,6 +10,8 @@ import { getGithubUsername, isGitRepository } from "./git";
  */
 export async function showConfig(repoConfig: boolean): Promise<void> {
 	try {
+		let configPath: string;
+
 		if (repoConfig) {
 			ensureWorkspaceExists();
 
@@ -22,15 +24,13 @@ export async function showConfig(repoConfig: boolean): Promise<void> {
 					"Current workspace is not a Git repository. Cannot create repository-specific config."
 				);
 			}
-		}
 
-		const configPath = repoConfig
-			? path.join(
-					vscode.workspace.workspaceFolders![0].uri.fsPath,
-					".revupconfig"
-			  )
-			: process.env.REVUP_CONFIG_PATH ||
-			  path.join(os.homedir(), ".revupconfig");
+			configPath = path.join(workspaceRoot, ".revupconfig");
+		} else {
+			configPath =
+				process.env.REVUP_CONFIG_PATH ||
+				path.join(os.homedir(), ".revupconfig");
+		}
 
 		const configUri = vscode.Uri.file(configPath);
 
@@ -69,10 +69,6 @@ export async function showConfig(repoConfig: boolean): Promise<void> {
 					);
 					await runCommandSilently(
 						`revup config main_branch main${repoFlag}`,
-						!repoConfig
-					);
-					await runCommandSilently(
-						`revup config github_username ${githubUsername}${repoFlag}`,
 						!repoConfig
 					);
 

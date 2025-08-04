@@ -2,10 +2,13 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import {
-	regiserGitUsernameConfigCommand,
+	registerGitUsernameConfigCommand,
 	registerOAuthConfigCommand,
 	registerOpenConfigCommand,
+	registerRevupUploadCommand,
 } from "./commands";
+
+let revupStatusBarItem: vscode.StatusBarItem;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -17,8 +20,19 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	registerOAuthConfigCommand(context);
-	regiserGitUsernameConfigCommand(context);
+	registerGitUsernameConfigCommand(context);
 	registerOpenConfigCommand(context);
+	registerRevupUploadCommand(context);
+
+	revupStatusBarItem = vscode.window.createStatusBarItem(
+		vscode.StatusBarAlignment.Right,
+		100
+	);
+	revupStatusBarItem.command = "revup.upload";
+	revupStatusBarItem.text = "$(cloud) Upload";
+	revupStatusBarItem.tooltip = "Upload changes to Revup";
+	context.subscriptions.push(revupStatusBarItem);
+	revupStatusBarItem.show();
 }
 
 // This method is called when your extension is deactivated

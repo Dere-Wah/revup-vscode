@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { showConfig } from "./config";
 import { getGithubUsername } from "./git";
+import { getOrCreateTerminal, runCommandSilently } from "./utils";
 
 export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
@@ -43,17 +44,26 @@ export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
 			});
 
 			if (value) {
-				// Create and show terminal
-				const terminal = vscode.window.createTerminal(
-					"Revup Configuration"
-				);
-				terminal.show();
+				try {
+					// Run the command silently
+					await runCommandSilently(
+						`revup config github_oauth ${value}`,
+						false
+					);
 
-				// Run the revup config command with the token
-				terminal.sendText(`revup config github_oauth ${value}`);
-
-				// Also copy to clipboard for convenience
-				await vscode.env.clipboard.writeText(value);
+					// Show success message
+					vscode.window.showInformationMessage(
+						"GitHub OAuth token configured successfully"
+					);
+				} catch (error) {
+					vscode.window.showErrorMessage(
+						`Failed to configure OAuth token: ${
+							error instanceof Error
+								? error.message
+								: String(error)
+						}`
+					);
+				}
 			}
 		}
 	);
@@ -61,7 +71,7 @@ export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-export function regiserGitUsernameConfigCommand(
+export function registerGitUsernameConfigCommand(
 	context: vscode.ExtensionContext
 ) {
 	const disposable = vscode.commands.registerCommand(
@@ -75,25 +85,33 @@ export function regiserGitUsernameConfigCommand(
 					"Couldn't get default github username."
 				);
 			}
-			vscode.window
-				.showInputBox({
-					prompt: "Enter your GitHub Username",
-					placeHolder: githubUsername, //TODO calculate from current file
-				})
-				.then((value) => {
-					if (value) {
-						// Create or get the terminal
-						const terminal = vscode.window.createTerminal("Revup");
+			const value = await vscode.window.showInputBox({
+				prompt: "Enter your GitHub Username",
+				placeHolder: githubUsername, //TODO calculate from current file
+			});
 
-						// Show the terminal
-						terminal.show();
+			if (value) {
+				try {
+					// Run the command silently
+					await runCommandSilently(
+						`revup config github_username ${value}`,
+						false
+					);
 
-						// Run the revup config command
-						terminal.sendText(
-							`revup config github_username ${value}`
-						);
-					}
-				});
+					// Show success message
+					vscode.window.showInformationMessage(
+						"GitHub username configured successfully"
+					);
+				} catch (error) {
+					vscode.window.showErrorMessage(
+						`Failed to configure GitHub username: ${
+							error instanceof Error
+								? error.message
+								: String(error)
+						}`
+					);
+				}
+			}
 		}
 	);
 
@@ -130,6 +148,24 @@ export function registerOpenConfigCommand(context: vscode.ExtensionContext) {
 			} else if (choice?.label === "Repo Configuration") {
 				await showConfig(true);
 			}
+		}
+	);
+
+	context.subscriptions.push(disposable);
+}
+
+export function registerRevupUploadCommand(context: vscode.ExtensionContext) {
+	const disposable = vscode.commands.registerCommand(
+		"revup.upload",
+		async () => {
+			// Create or get the terminal
+			const terminal = getOrCreateTerminal("Revup Upload");
+
+			// Show the terminal
+			terminal.show();
+
+			// Run the revup upload command
+			terminal.sendText("revup upload");
 		}
 	);
 
