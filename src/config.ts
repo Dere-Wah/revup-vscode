@@ -35,8 +35,12 @@ export async function showRepoConfig(): Promise<void> {
 			await vscode.window.showTextDocument(doc);
 		} catch (error) {
 			// Execute commands silently
-			await runCommandSilently(`revup config remote_name origin --repo`);
-			await runCommandSilently(`revup config main_branch main --repo`);
+			await runCommandSilently(`revup config remote_name origin --repo`, {
+				global: false,
+			});
+			await runCommandSilently(`revup config main_branch main --repo`, {
+				global: false,
+			});
 
 			// Try to open the file immediately since we await the commands
 			try {

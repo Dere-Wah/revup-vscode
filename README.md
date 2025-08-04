@@ -1,71 +1,86 @@
-# revup-vscode README
+# revup-vscode
 
-This is the README for your extension "revup-vscode". After writing up a brief description, we recommend including the following sections.
+A VS Code extension that integrates with
+[skydio/revup](https://github.com/skydio/revup) to enhance your GitHub PR
+workflow with smart commit messages and topic management.
+
+## Prerequisites
+
+This extension requires `revup` to be installed on your system. Currently, the
+extension does not handle the installation of `revup`. Please follow the
+installation instructions in the [revup README](https://github.com/skydio/revup)
+to set up the core tool first.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### 1. VSCode Commands
 
-For example if there is an image subfolder under your extension project workspace:
+-   **Configure GitHub OAuth Token** (`revup.configOAuth`): Set up your GitHub
+    OAuth token for authentication
+-   **Configure Branch Naming Style** (`revup.configBranchNamingStyle`):
+    Customize how your branch names are formatted
+-   **Open Configuration File** (`revup.openConfig`): Quick access to your revup
+    configuration
+-   **Revup Upload** (`revup.upload`): Trigger revup upload directly from VS
+    Code
 
-\!\[feature X\]\(images/feature-x.png\)
+### 2. Smart Commit Messages
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+-   Automatically templates your COMMIT_EDITMSG file when creating a new commit
+-   Adds the current topic and relative key ready to use
+-   Displays all active topics in your repository for reference
+
+### 3. Commit Message Auto-completion
+
+-   Intelligent auto-completion for commit messages
+-   Suggests topics based on your repository's active topics
+-   Makes it easier to maintain consistent commit message formatting
+
+### 4. Quick Access Status Bar
+
+-   Convenient status bar item for quick access to revup upload
+-   Visual indicator for revup integration status
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+1. Install revup by following the instructions at
+   [skydio/revup](https://github.com/skydio/revup)
+2. Configure your GitHub OAuth token using the
+   `Revup: Configure Github OAuth Key` command
+3. Set up your preferred branch naming style using
+   `Revup: Configure Branch Naming Style`
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+This extension contributes the following settings through VS Code's settings:
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+-   `revup.revupConfiguration`: Access and modify your revup configuration
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Please report any issues on the
+[GitHub repository](https://github.com/derewah/revup-vscode/issues).
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
+-   Initial release
+-   Basic integration with revup
+-   Commit message templating
+-   Topic-aware auto-completion
+-   Status bar integration
 
-Initial release of ...
+## Upcoming Features
 
-### 1.0.1
+The following features are currently being worked on:
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+-   **Auto Installation**: Automatic installation of revup during extension
+    setup
+-   **Optimized Topic Tracking**: Enhanced topic tracking implementation without
+    relying on terminal commands for autocompletion
+-   **VSCode Settings Integration**: Improved configuration interface that
+    integrates seamlessly with VSCode's native settings system
+-   **Extended Revup Features**: Additional functionality beyond the basic
+    features:
+    -   (More features to be announced)
