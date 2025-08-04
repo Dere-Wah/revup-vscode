@@ -26,11 +26,15 @@ to set up the core tool first.
 
 ### 2. Smart Commit Messages
 
+<img width="747" height="327" alt="image" src="https://github.com/user-attachments/assets/d8ff55c1-747d-4587-b88e-5918926b72b2" />
+
+
 -   Automatically templates your COMMIT_EDITMSG file when creating a new commit
 -   Adds the current topic and relative key ready to use
 -   Displays all active topics in your repository for reference
 
 ### 3. Commit Message Auto-completion
+![auto](https://github.com/user-attachments/assets/875e5e5b-a26d-423d-9784-427514fe0fb7)
 
 -   Intelligent auto-completion for commit messages
 -   Suggests topics based on your repository's active topics
