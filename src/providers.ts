@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { getAllTopics } from "./revup";
 
 // Define semantic token types and modifiers
 const tokenTypes = new Map<string, number>();
@@ -12,12 +11,12 @@ const COMMIT_MSG_SELECTOR = {
 	pattern: "**/.git/COMMIT_EDITMSG",
 };
 
-export const registerRevupProviders = () => {
+export const registerRevupProviders = (getTopics: () => string[]) => {
 	// Register topic completions provider
 	vscode.languages.registerCompletionItemProvider(COMMIT_MSG_SELECTOR, {
 		async provideCompletionItems(document, position, token, context) {
 			try {
-				const topics = await getAllTopics();
+				const topics = getTopics();
 
 				const completionItems = topics.flatMap((topic) => {
 					const topicCompletion = new vscode.CompletionItem(
@@ -58,7 +57,7 @@ export const registerRevupProviders = () => {
 			const word = document.getText(wordRange);
 
 			try {
-				const topics = await getAllTopics();
+				const topics = getTopics();
 				let description = "";
 
 				if (word === "topic:") {
@@ -129,10 +128,14 @@ export const registerRevupProviders = () => {
 		{
 			rules: {
 				topic: {
-					foreground: "#C586C0", // Purple color (you can adjust this hex code)
+					foreground: "${editor.symbolHighlight.foreground}",
+					bold: true,
 				},
 			},
 		},
 		vscode.ConfigurationTarget.Global
 	);
+
+	// Return disposables
+	return semanticTokens;
 };
