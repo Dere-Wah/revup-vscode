@@ -2,7 +2,6 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import {
-	registerGitUsernameConfigCommand,
 	registerOAuthConfigCommand,
 	registerOpenConfigCommand,
 	registerRevupUploadCommand,
@@ -21,7 +20,6 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	registerOAuthConfigCommand(context);
-	registerGitUsernameConfigCommand(context);
 	registerOpenConfigCommand(context);
 	registerRevupUploadCommand(context);
 
@@ -35,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.window.onDidChangeTextEditorSelection(revupStatusBarItem.update)
 	);
+
 	revupStatusBarItem.update();
 }
 

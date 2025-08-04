@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
-import { showConfig } from "./config";
-import { getGithubUsername } from "./git";
+import { showRepoConfig } from "./config";
 import { getOrCreateTerminal, runCommandSilently } from "./utils";
 
 export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
@@ -71,80 +70,11 @@ export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-export function registerGitUsernameConfigCommand(
-	context: vscode.ExtensionContext
-) {
-	const disposable = vscode.commands.registerCommand(
-		"revup.configGithubUsername",
-		async () => {
-			let githubUsername = "username";
-			try {
-				githubUsername = await getGithubUsername();
-			} catch (error) {
-				vscode.window.showErrorMessage(
-					"Couldn't get default github username."
-				);
-			}
-			const value = await vscode.window.showInputBox({
-				prompt: "Enter your GitHub Username",
-				placeHolder: githubUsername, //TODO calculate from current file
-			});
-
-			if (value) {
-				try {
-					// Run the command silently
-					await runCommandSilently(
-						`revup config github_username ${value}`,
-						{ global: false }
-					);
-
-					// Show success message
-					vscode.window.showInformationMessage(
-						"GitHub username configured successfully"
-					);
-				} catch (error) {
-					vscode.window.showErrorMessage(
-						`Failed to configure GitHub username: ${
-							error instanceof Error
-								? error.message
-								: String(error)
-						}`
-					);
-				}
-			}
-		}
-	);
-
-	context.subscriptions.push(disposable);
-}
-
 export function registerOpenConfigCommand(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
 		"revup.openConfig",
 		async () => {
-			const choice = await vscode.window.showQuickPick(
-				[
-					{
-						label: "User Configuration",
-						description:
-							"Open User Revup configuration file (~/.revupconfig)",
-					},
-					{
-						label: "Repo Configuration",
-						description:
-							"Open repository-specific Revup configuration (.revupconfig)",
-					},
-				],
-				{
-					placeHolder: "Select which configuration file to open",
-				}
-			);
-
-			if (choice?.label === "User Configuration") {
-				await showConfig(false);
-			} else if (choice?.label === "Repo Configuration") {
-				await showConfig(true);
-			}
+			await showRepoConfig();
 		}
 	);
 

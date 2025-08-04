@@ -12,25 +12,163 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "publisher": "derewah",
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Revup Configuration",
+      "properties": {
+        "revup.remote_name": {
+          "type": "string",
+          "default": "origin",
+          "description": "Name of the remote repository"
+        },
+        "revup.main_branch": {
+          "type": "string",
+          "default": "main",
+          "description": "Name of the main branch"
+        },
+        "revup.upload.branch_format": {
+          "type": "string",
+          "enum": ["user+branch", "user", "branch", "none"],
+          "default": "user",
+          "description": "Format for branch naming"
+        },
+        "revup.upload.update_pr_body": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to update PR body"
+        },
+        "revup.upload.rebase": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to rebase changes"
+        },
+        "revup.upload.skip_confirm": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip confirmation"
+        },
+        "revup.upload.dry_run": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to perform a dry run"
+        },
+        "revup.upload.push_only": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to only push changes"
+        },
+        "revup.upload.status": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show status"
+        },
+        "revup.upload.create_local_branches": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to create local branches"
+        },
+        "revup.upload.review_graph": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show review graph"
+        },
+        "revup.upload.trim_tags": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to trim tags"
+        },
+        "revup.upload.patchsets": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to use patchsets"
+        },
+        "revup.upload.self_authored_only": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to only include self-authored changes"
+        },
+        "revup.upload.auto_add_users": {
+          "type": "string",
+          "enum": ["no", "a2r", "r2a", "both"],
+          "default": "no",
+          "description": "Auto-add users configuration"
+        }
+      }
+    },
     "commands": [
       {
         "command": "revup.configOAuth",
-        "title": "Configure Revup OAuth Key"
+        "title": "Revup: Configure Github OAuth Key"
       },
       {
-        "command": "revup.configGithubUsername",
-        "title": "Configure Revup GitHub Username"
+        "command": "revup.configBranchNamingStyle",
+        "title": "Revup: Configure Branch Naming Style"
       },
       {
         "command": "revup.openConfig",
-        "title": "Open Revup Configuration File"
+        "title": "Revup: Open Configuration File"
       },
       {
         "command": "revup.upload",
-        "title": "Revup Upload",
+        "title": "Revup: Revup Upload",
         "icon": "$(cloud-upload)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "revup",
+          "title": "Revup",
+          "icon": "$(cloud-upload)"
+        }
+      ]
+    },
+    "views": {
+      "revup": [{
+        "id": "revupTopics",
+        "name": "Revup Topics",
+        "icon": "$(cloud-upload)",
+        "contextualTitle": "Revup Topics"
+      }]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "revup.openConfig",
+          "group": "navigation",
+          "when": "view == revupTopics"
+        }
+      ],
+      "scm/resourceGroup/context": [
+        {
+          "command": "revup.openConfig",
+          "group": "inline@1",
+          "when": "scmProvider == git"
+        }
+      ],
+      "scm/resourceState/context": [
+        {
+          "command": "revup.openConfig",
+          "group": "inline@1",
+          "when": "scmProvider == git"
+        }
+      ],
+      "scm/inputBox": [
+        {
+          "command": "revup.openConfig",
+          "alt": "Topic Name",
+          "when ": "scmProvider == git"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "revupTopics",
+        "when": "revup.topics.length > 0",
+        "content": "No topics found [learn more](https://www.npmjs.com/).\n[Create a Commit](command:git.commit)"
       }
     ]
   },
