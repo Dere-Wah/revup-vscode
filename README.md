@@ -25,10 +25,10 @@ currently working on finding a publisher), you can install it manually:
 
 ## Prerequisites
 
-This extension requires `revup` to be installed on your system. Currently, the
-extension does not handle the installation of `revup`. Please follow the
+This extension requires `revup` to be installed on your system. Please follow the
 installation instructions in the [revup README](https://github.com/skydio/revup)
-to set up the core tool first.
+to set up the core tool first. If revup is not installed, the extension will try
+to automatically install it in your terminal.
 
 ## Features
 
