@@ -1,17 +1,48 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import * as os from "os";
-import { ensureWorkspaceExists, runCommandSilently } from "./utils";
-import { getGithubUsername, isGitRepository } from "./git";
+import * as fs from "fs";
+import { ensureWorkspaceExists } from "./utils";
+import { isGitRepository } from "./git";
+
+/**
+ * Opens an existing RevUp configuration file in VS Code editor
+ * @param configPath Path to the configuration file
+ */
+export async function openConfig(configPath: string): Promise<void> {
+	const configUri = vscode.Uri.file(configPath);
+	const doc = await vscode.workspace.openTextDocument(configUri);
+	await vscode.window.showTextDocument(doc);
+}
+
+/**
+ * Creates a new RevUp configuration file by copying from the default template
+ * @param configPath Path where the configuration file should be created
+ */
+export async function createConfig(configPath: string): Promise<void> {
+	// Get the extension's root directory (go up one level from src)
+	const extensionPath = path.resolve(__dirname, "..");
+
+	// Path to the default config template
+	const defaultConfigPath = path.join(extensionPath, ".revupconfig.default");
+
+	// Check if the default config file exists
+	if (!fs.existsSync(defaultConfigPath)) {
+		throw new Error(
+			`Default config template not found at: ${defaultConfigPath}`
+		);
+	}
+
+	// Copy the default config to the workspace
+	const defaultConfigContent = fs.readFileSync(defaultConfigPath, "utf8");
+	fs.writeFileSync(configPath, defaultConfigContent, "utf8");
+}
 
 /**
  * Shows the RevUp configuration file in VS Code editor
- * @param repoConfig If true, shows repository-specific config, otherwise shows global config
+ * Creates the config file from template if it doesn't exist
  */
 export async function showRepoConfig(): Promise<void> {
 	try {
-		let configPath: string;
-
 		ensureWorkspaceExists();
 
 		// Check if workspace is a Git repository
@@ -26,34 +57,22 @@ export async function showRepoConfig(): Promise<void> {
 			);
 		}
 
-		configPath = path.join(workspaceRoot, ".revupconfig");
-
-		const configUri = vscode.Uri.file(configPath);
+		const configPath = path.join(workspaceRoot, ".revupconfig");
 
 		try {
-			const doc = await vscode.workspace.openTextDocument(configUri);
-			await vscode.window.showTextDocument(doc);
+			// Try to open existing config file
+			await openConfig(configPath);
 		} catch (error) {
-			// Execute commands silently
-			await runCommandSilently(`revup config remote_name origin --repo`, {
-				global: false,
-			});
-			await runCommandSilently(`revup config main_branch main --repo`, {
-				global: false,
-			});
-
-			// Try to open the file immediately since we await the commands
+			// Config file doesn't exist, create it from template
 			try {
-				const newDoc = await vscode.workspace.openTextDocument(
-					configUri
-				);
-				await vscode.window.showTextDocument(newDoc);
-			} catch (retryError) {
+				await createConfig(configPath);
+				await openConfig(configPath);
+			} catch (createError) {
 				vscode.window.showErrorMessage(
-					`Failed to open the newly created config file: ${
-						retryError instanceof Error
-							? retryError.message
-							: String(retryError)
+					`Failed to create config file: ${
+						createError instanceof Error
+							? createError.message
+							: String(createError)
 					}`
 				);
 			}
