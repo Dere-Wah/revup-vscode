@@ -4,6 +4,25 @@ A VS Code extension that integrates with
 [skydio/revup](https://github.com/skydio/revup) to enhance your GitHub PR
 workflow with smart commit messages and topic management.
 
+## Installation
+
+Since this extension is not yet published on the VS Code Marketplace (we are
+currently working on finding a publisher), you can install it manually:
+
+1. **Download the Extension**: Go to the
+   [Releases](https://github.com/derewah/revup-vscode/releases) page and
+   download the latest `.vsix` file
+2. **Install from VSIX**: In VS Code, open the Command Palette (`Ctrl+Shift+P` /
+   `Cmd+Shift+P`) and run the command `Extensions: Install from VSIX...`
+3. **Select the Downloaded File**: Choose the `.vsix` file you downloaded
+4. **Start Using**: Once the extension is installed, you can start using it
+   immediately. If revup is not found on your system, the extension will
+   automatically prompt you to install it
+
+> **Note**: I am currently working on getting this extension published to the VS
+> Code Marketplace for easier installation. Until then, manual installation via
+> VSIX is required.
+
 ## Prerequisites
 
 This extension requires `revup` to be installed on your system. Currently, the

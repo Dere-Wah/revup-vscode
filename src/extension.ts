@@ -7,12 +7,10 @@ import {
 	registerRevupUploadCommand,
 	registerRevupInstallCommand,
 } from "./commands";
-import { StatusBar } from "./StatusBar";
 import { registerRevupProviders } from "./providers";
 import { activateFileWatcher } from "./fileSystemWatcher";
 import { Revup } from "./revup";
 
-let revupStatusBarItem: StatusBar;
 let revupInstance: Revup;
 
 // This method is called when your extension is activated
@@ -23,8 +21,6 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log(
 		'Congratulations, your extension "revup-vscode" is now active!!!'
 	);
-
-	revupStatusBarItem = new StatusBar();
 
 	revupInstance = new Revup();
 
@@ -38,15 +34,17 @@ export function activate(context: vscode.ExtensionContext) {
 	// Activate the commit message file watcher
 	activateFileWatcher(context, revupInstance.getTopics.bind(revupInstance));
 
-	context.subscriptions.push(revupStatusBarItem);
+	context.subscriptions.push(revupInstance.getStatusBar());
 	context.subscriptions.push(
-		vscode.window.onDidChangeActiveTextEditor(revupStatusBarItem.update)
+		vscode.window.onDidChangeActiveTextEditor(
+			revupInstance.getStatusBar().update
+		)
 	);
 	context.subscriptions.push(
-		vscode.window.onDidChangeTextEditorSelection(revupStatusBarItem.update)
+		vscode.window.onDidChangeTextEditorSelection(
+			revupInstance.getStatusBar().update
+		)
 	);
-
-	revupStatusBarItem.update();
 }
 
 // This method is called when your extension is deactivated
