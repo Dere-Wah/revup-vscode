@@ -5,14 +5,15 @@ import {
 	registerOAuthConfigCommand,
 	registerOpenConfigCommand,
 	registerRevupUploadCommand,
+	registerRevupInstallCommand,
 } from "./commands";
 import { StatusBar } from "./StatusBar";
 import { registerRevupProviders } from "./providers";
 import { activateFileWatcher } from "./fileSystemWatcher";
-import { TopicsWatcher } from "./topicsWatcher";
+import { Revup } from "./revup";
 
 let revupStatusBarItem: StatusBar;
-let topicsWatcher: TopicsWatcher;
+let revupInstance: Revup;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -23,18 +24,19 @@ export function activate(context: vscode.ExtensionContext) {
 		'Congratulations, your extension "revup-vscode" is now active!!!'
 	);
 
-	registerOAuthConfigCommand(context);
-	registerOpenConfigCommand(context);
-	registerRevupUploadCommand(context);
-
 	revupStatusBarItem = new StatusBar();
 
-	topicsWatcher = new TopicsWatcher();
+	revupInstance = new Revup();
 
-	registerRevupProviders(topicsWatcher.getTopics.bind(topicsWatcher));
+	registerOAuthConfigCommand(context, revupInstance);
+	registerOpenConfigCommand(context, revupInstance);
+	registerRevupUploadCommand(context, revupInstance);
+	registerRevupInstallCommand(context, revupInstance);
+
+	registerRevupProviders(revupInstance.getTopics.bind(revupInstance));
 
 	// Activate the commit message file watcher
-	activateFileWatcher(context, topicsWatcher.getTopics.bind(topicsWatcher));
+	activateFileWatcher(context, revupInstance.getTopics.bind(revupInstance));
 
 	context.subscriptions.push(revupStatusBarItem);
 	context.subscriptions.push(

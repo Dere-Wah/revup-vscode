@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import { isGitRepository } from "./git";
-import { TopicsWatcher } from "./topicsWatcher";
 
 // Keep track of active watchers per workspace
 const activeWatchers = new Map<string, CommitMessageWatcher>();
@@ -148,9 +147,7 @@ async function initializeWorkspaceWatcher(
 		activeWatchers.delete(workspaceRoot);
 	}
 
-	// Create new watchers
-	const topicsWatcher = new TopicsWatcher();
 	const watcher = new CommitMessageWatcher(workspaceRoot, getTopics);
 	activeWatchers.set(workspaceRoot, watcher);
-	context.subscriptions.push(watcher, topicsWatcher);
+	context.subscriptions.push(watcher);
 }

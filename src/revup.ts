@@ -1,11 +1,12 @@
 import * as vscode from "vscode";
 import { isGitRepository } from "./git";
-import { runCommandSilently } from "./utils";
+import { runCommandSilently, getOrCreateTerminal } from "./utils";
 
-export class TopicsWatcher {
+export class Revup {
 	private topics: string[] = [];
 	private refreshInterval: NodeJS.Timeout | undefined;
 	private static readonly REFRESH_INTERVAL_MS = 10 * 1000; // 10 seconds
+	private installed: boolean | undefined;
 
 	constructor() {
 		// Initialize when a workspace is opened
@@ -32,8 +33,15 @@ export class TopicsWatcher {
 	) {
 		const isGitRepo = await isGitRepository(workspaceFolder.uri.fsPath);
 		if (isGitRepo) {
-			await this.refreshTopics();
-			this.startPeriodicRefresh();
+			// Check if revup is installed before proceeding
+			if (this.installed === undefined) {
+				await this.isRevupInstalled();
+			}
+
+			if (this.installed) {
+				await this.refreshTopics();
+				this.startPeriodicRefresh();
+			}
 		}
 	}
 
@@ -43,6 +51,19 @@ export class TopicsWatcher {
 	}
 
 	private async refreshTopics() {
+		// Don't refresh if revup is not installed
+		if (this.installed === false) {
+			return;
+		}
+
+		// Check installation status if undefined
+		if (this.installed === undefined) {
+			await this.isRevupInstalled();
+			if (!this.installed) {
+				return;
+			}
+		}
+
 		try {
 			// Run revup toolkit list-topics command
 			const { stdout } = await runCommandSilently(
@@ -64,10 +85,10 @@ export class TopicsWatcher {
 	}
 
 	private startPeriodicRefresh() {
-		if (!this.refreshInterval) {
+		if (!this.refreshInterval && this.installed !== false) {
 			this.refreshInterval = setInterval(
 				() => this.refreshTopics(),
-				TopicsWatcher.REFRESH_INTERVAL_MS
+				Revup.REFRESH_INTERVAL_MS
 			);
 		}
 	}
@@ -93,6 +114,63 @@ export class TopicsWatcher {
 	 */
 	public async forceRefresh(): Promise<void> {
 		await this.refreshTopics();
+	}
+
+	/**
+	 * Checks if revup CLI is installed by attempting to run 'revup --version'
+	 * @returns Promise<boolean> indicating whether revup is installed
+	 */
+	public async isRevupInstalled(): Promise<boolean> {
+		try {
+			await runCommandSilently("revup --version");
+			this.setInstallationStatus(true);
+			return true;
+		} catch (error) {
+			const response = await vscode.window.showErrorMessage(
+				"Revup CLI is not installed. Would you like to install it?",
+				"Yes",
+				"No"
+			);
+
+			if (response === "Yes") {
+				const terminal = getOrCreateTerminal("Revup Installation");
+				terminal.show();
+				terminal.sendText("pip install revup");
+				this.setInstallationStatus(undefined);
+			} else {
+				this.setInstallationStatus(false);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Gets the current installation status
+	 * @returns The installation status (true/false/undefined)
+	 */
+	public getInstallationStatus(): boolean | undefined {
+		return this.installed;
+	}
+
+	/**
+	 * Sets the installation status
+	 * @param installed The new installation status
+	 */
+	public setInstallationStatus(installed: boolean | undefined): void {
+		const wasInstalled = this.installed;
+		this.installed = installed;
+
+		// If revup was just installed, start refreshing
+		if (!wasInstalled && installed) {
+			this.refreshTopics();
+			this.startPeriodicRefresh();
+		}
+		// If revup was uninstalled, stop refreshing
+		else if (wasInstalled && !installed) {
+			this.stopPeriodicRefresh();
+			this.clearTopics();
+		}
 	}
 
 	/**
