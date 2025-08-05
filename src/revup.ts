@@ -1,12 +1,14 @@
 import * as vscode from "vscode";
 import { isGitRepository } from "./git";
 import { runCommandSilently, getOrCreateTerminal } from "./utils";
+import { StatusBar } from "./StatusBar";
 
 export class Revup {
 	private topics: string[] = [];
 	private refreshInterval: NodeJS.Timeout | undefined;
 	private static readonly REFRESH_INTERVAL_MS = 10 * 1000; // 10 seconds
 	private installed: boolean | undefined;
+	private statusBar: StatusBar;
 
 	constructor() {
 		// Initialize when a workspace is opened
@@ -26,6 +28,8 @@ export class Revup {
 		if (vscode.workspace.workspaceFolders?.[0]) {
 			this.initializeForWorkspace(vscode.workspace.workspaceFolders[0]);
 		}
+
+		this.statusBar = new StatusBar(this);
 	}
 
 	private async initializeForWorkspace(
@@ -116,6 +120,10 @@ export class Revup {
 		await this.refreshTopics();
 	}
 
+	public getStatusBar(): StatusBar {
+		return this.statusBar;
+	}
+
 	/**
 	 * Checks if revup CLI is installed by attempting to run 'revup --version'
 	 * @returns Promise<boolean> indicating whether revup is installed
@@ -171,6 +179,7 @@ export class Revup {
 			this.stopPeriodicRefresh();
 			this.clearTopics();
 		}
+		this.statusBar.update();
 	}
 
 	/**
