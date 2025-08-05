@@ -2,32 +2,6 @@
 import { runCommandSilently } from "./utils";
 
 /**
- * Gets the Git user email from global config
- * @returns Promise containing the user's Git email
- * @throws Error if email is not configured
- */
-export async function getGithubEmail(): Promise<string> {
-	try {
-		const { stdout } = await runCommandSilently("git config user.email", {
-			global: true,
-		});
-		const email = stdout.trim();
-
-		if (!email) {
-			throw new Error(
-				"Couldn't get git email, set it with `git config --global user.email`"
-			);
-		}
-
-		return email;
-	} catch (error) {
-		throw new Error(
-			"Couldn't get git email, set it with `git config --global user.email`"
-		);
-	}
-}
-
-/**
  * Gets the Git user name from global config
  * @returns Promise containing the user's Git name
  * @throws Error if name is not configured

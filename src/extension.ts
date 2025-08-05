@@ -5,6 +5,7 @@ import {
 	registerOAuthConfigCommand,
 	registerOpenConfigCommand,
 	registerRevupUploadCommand,
+	registerRevupInstallCommand,
 } from "./commands";
 import { StatusBar } from "./StatusBar";
 import { registerRevupProviders } from "./providers";
@@ -30,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 	registerOAuthConfigCommand(context, revupInstance);
 	registerOpenConfigCommand(context, revupInstance);
 	registerRevupUploadCommand(context, revupInstance);
+	registerRevupInstallCommand(context, revupInstance);
 
 	registerRevupProviders(revupInstance.getTopics.bind(revupInstance));
 

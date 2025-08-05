@@ -123,3 +123,23 @@ export function registerRevupUploadCommand(
 
 	context.subscriptions.push(disposable);
 }
+
+export function registerRevupInstallCommand(
+	context: vscode.ExtensionContext,
+	revupInstance: Revup
+) {
+	const disposable = vscode.commands.registerCommand(
+		"revup.install",
+		async () => {
+			// Check if revup is already installed
+			if (await revupInstance.isRevupInstalled()) {
+				vscode.window.showInformationMessage(
+					"Revup is already installed!"
+				);
+				return;
+			}
+		}
+	);
+
+	context.subscriptions.push(disposable);
+}

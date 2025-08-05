@@ -64,6 +64,11 @@
         "command": "revup.upload",
         "title": "Revup: Revup Upload",
         "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "revup.install",
+        "title": "Revup: Install Revup",
+        "icon": "$(cloud-download)"
       }
     ]
   },
