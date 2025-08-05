@@ -1,11 +1,20 @@
 import * as vscode from "vscode";
 import { showRepoConfig } from "./config";
 import { getOrCreateTerminal, runCommandSilently } from "./utils";
+import { Revup } from "./revup";
 
-export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
+export function registerOAuthConfigCommand(
+	context: vscode.ExtensionContext,
+	revupInstance: Revup
+) {
 	const disposable = vscode.commands.registerCommand(
 		"revup.configOAuth",
 		async () => {
+			// Check if revup is installed
+			if (!(await revupInstance.isRevupInstalled())) {
+				return;
+			}
+
 			// Ask user if they want to open the token generation page
 			const choice = await vscode.window.showQuickPick(
 				[
@@ -70,10 +79,18 @@ export function registerOAuthConfigCommand(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-export function registerOpenConfigCommand(context: vscode.ExtensionContext) {
+export function registerOpenConfigCommand(
+	context: vscode.ExtensionContext,
+	revupInstance: Revup
+) {
 	const disposable = vscode.commands.registerCommand(
 		"revup.openConfig",
 		async () => {
+			// Check if revup is installed
+			if (!(await revupInstance.isRevupInstalled())) {
+				return;
+			}
+
 			await showRepoConfig();
 		}
 	);
@@ -81,10 +98,18 @@ export function registerOpenConfigCommand(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-export function registerRevupUploadCommand(context: vscode.ExtensionContext) {
+export function registerRevupUploadCommand(
+	context: vscode.ExtensionContext,
+	revupInstance: Revup
+) {
 	const disposable = vscode.commands.registerCommand(
 		"revup.upload",
 		async () => {
+			// Check if revup is installed
+			if (!(await revupInstance.isRevupInstalled())) {
+				return;
+			}
+
 			// Create or get the terminal
 			const terminal = getOrCreateTerminal("Revup Upload");
 
