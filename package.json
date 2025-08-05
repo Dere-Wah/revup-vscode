@@ -2,7 +2,7 @@
   "name": "revup-vscode",
   "displayName": "Revup - Enhanced PR Workflow",
   "description": "A VS Code extension for Skydio's revup tool that enhances your GitHub PR workflow with smart commit messages and topic management. Based on skydio/revup.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.80.0"
   },
