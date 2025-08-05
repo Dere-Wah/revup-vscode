@@ -1,15 +1,20 @@
 {
   "name": "revup-vscode",
-  "displayName": "revup-vscode",
+  "displayName": "Revup - Enhanced PR Workflow",
   "description": "A VS Code extension for Skydio's revup tool that enhances your GitHub PR workflow with smart commit messages and topic management. Based on skydio/revup.",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.99.3"
+    "vscode": "^1.80.0"
   },
   "categories": [
     "Other",
     "SCM"
   ],
+  "homepage": "https://marketplace.visualstudio.com/items?itemName=derewah.revup-vscode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dere-Wah/revup-vscode.git"
+  },
   "keywords": [
     "git",
     "github",
@@ -33,6 +38,7 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "icon": "icon.png",
   "publisher": "derewah",
   "main": "./out/extension.js",
   "contributes": {
@@ -76,7 +82,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.102.0",
+    "@types/vscode": "^1.80.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
