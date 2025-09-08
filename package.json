@@ -58,12 +58,12 @@
 				"title": "Revup: Configure Github OAuth Key"
 			},
 			{
-				"command": "revup.configBranchNamingStyle",
-				"title": "Revup: Configure Branch Naming Style"
+				"command": "revup.openRepoConfig",
+				"title": "Revup: Open Repository Configuration File"
 			},
 			{
-				"command": "revup.openConfig",
-				"title": "Revup: Open Configuration File"
+				"command": "revup.openGlobalConfig",
+				"title": "Revup: Open Global Configuration File"
 			},
 			{
 				"command": "revup.upload",

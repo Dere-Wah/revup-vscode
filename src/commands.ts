@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { showRepoConfig } from "./config";
+import { showGlobalConfig, showRepoConfig } from "./config";
 import { getOrCreateTerminal, runCommandSilently } from "./utils";
 import { Revup } from "./revup";
 
@@ -12,6 +12,9 @@ export function registerOAuthConfigCommand(
 		async () => {
 			// Check if revup is installed
 			if (!(await revupInstance.isRevupInstalled())) {
+				vscode.window.showErrorMessage(
+					"Revup is not installed. Use >Revup: Install Revup to install it."
+				);
 				return;
 			}
 
@@ -79,19 +82,44 @@ export function registerOAuthConfigCommand(
 	context.subscriptions.push(disposable);
 }
 
-export function registerOpenConfigCommand(
+export function registerOpenRepoConfigCommand(
 	context: vscode.ExtensionContext,
 	revupInstance: Revup
 ) {
 	const disposable = vscode.commands.registerCommand(
-		"revup.openConfig",
+		"revup.openRepoConfig",
 		async () => {
 			// Check if revup is installed
 			if (!(await revupInstance.isRevupInstalled())) {
+				vscode.window.showErrorMessage(
+					"Revup is not installed. Use >Revup: Install Revup to install it."
+				);
 				return;
 			}
 
 			await showRepoConfig();
+		}
+	);
+
+	context.subscriptions.push(disposable);
+}
+
+export function registerOpenGlobalConfigCommand(
+	context: vscode.ExtensionContext,
+	revupInstance: Revup
+) {
+	const disposable = vscode.commands.registerCommand(
+		"revup.openGlobalConfig",
+		async () => {
+			// Check if revup is installed
+			if (!(await revupInstance.isRevupInstalled())) {
+				vscode.window.showErrorMessage(
+					"Revup is not installed. Use >Revup: Install Revup to install it."
+				);
+				return;
+			}
+
+			await showGlobalConfig();
 		}
 	);
 
@@ -107,6 +135,9 @@ export function registerRevupUploadCommand(
 		async () => {
 			// Check if revup is installed
 			if (!(await revupInstance.isRevupInstalled())) {
+				vscode.window.showErrorMessage(
+					"Revup is not installed. Use >Revup: Install Revup to install it."
+				);
 				return;
 			}
 
@@ -130,12 +161,14 @@ export function registerRevupInstallCommand(
 ) {
 	const disposable = vscode.commands.registerCommand(
 		"revup.install",
-		async () => {
+		async (silent: boolean = false) => {
 			// Check if revup is already installed
 			if (await revupInstance.isRevupInstalled()) {
-				vscode.window.showInformationMessage(
-					"Revup is already installed!"
-				);
+				if (!silent) {
+					vscode.window.showInformationMessage(
+						"Revup is already installed!"
+					);
+				}
 				return;
 			}
 		}

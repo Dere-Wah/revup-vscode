@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
+import * as os from "os";
 import { ensureWorkspaceExists } from "./utils";
 import { isGitRepository } from "./git";
 
@@ -80,6 +81,33 @@ export async function showRepoConfig(): Promise<void> {
 	} catch (error) {
 		vscode.window.showErrorMessage(
 			`Error showing config: ${
+				error instanceof Error ? error.message : String(error)
+			}`
+		);
+	}
+}
+
+/**
+ * Shows the global RevUp configuration file from the user's home directory
+ * Does not create the config file if it doesn't exist
+ */
+export async function showGlobalConfig(): Promise<void> {
+	try {
+		// Get the user's home directory in an OS-independent way
+		const homeDir = os.homedir();
+		const globalConfigPath = path.join(homeDir, ".revupconfig");
+
+		// Check if the global config file exists
+		if (!fs.existsSync(globalConfigPath)) {
+			vscode.window.showErrorMessage("Global config not found");
+			return;
+		}
+
+		// Open the existing global config file
+		await openConfig(globalConfigPath);
+	} catch (error) {
+		vscode.window.showErrorMessage(
+			`Error showing global config: ${
 				error instanceof Error ? error.message : String(error)
 			}`
 		);
