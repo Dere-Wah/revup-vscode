@@ -37,12 +37,13 @@ your terminal.
 
 -   **Configure GitHub OAuth Token** (`revup.configOAuth`): Set up your GitHub
     OAuth token for authentication
--   **Configure Branch Naming Style** (`revup.configBranchNamingStyle`):
-    Customize how your branch names are formatted
--   **Open Configuration File** (`revup.openConfig`): Quick access to your revup
-    configuration
+-   **Open Repo Configuration File** (`revup.openRepoConfig`): Quick access to
+    your Repo revup configuration
+-   **Open Global Configuration File** (`revup.openGlobalConfig`): Quick access
+    your Global revup configuration
 -   **Revup Upload** (`revup.upload`): Trigger revup upload directly from VS
     Code
+-   **Revup Install** (`revup.install`): Automatically install revup.
 
 ### 2. Smart Commit Messages
 

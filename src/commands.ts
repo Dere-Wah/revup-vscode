@@ -162,6 +162,8 @@ export function registerRevupInstallCommand(
 		"revup.install",
 		async (silent: boolean = false) => {
 			// Check if revup is already installed
+			// !!IMPORTANT!! Revup installation is handled
+			// directly inside of the method isRevupInstalled().
 			if (await revupInstance.isRevupInstalled()) {
 				if (!silent) {
 					vscode.window.showInformationMessage(
