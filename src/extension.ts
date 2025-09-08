@@ -3,9 +3,10 @@
 import * as vscode from "vscode";
 import {
 	registerOAuthConfigCommand,
-	registerOpenConfigCommand,
+	registerOpenRepoConfigCommand,
 	registerRevupUploadCommand,
 	registerRevupInstallCommand,
+	registerOpenGlobalConfigCommand,
 } from "./commands";
 import { registerRevupProviders } from "./providers";
 import { activateFileWatcher } from "./fileSystemWatcher";
@@ -25,9 +26,13 @@ export function activate(context: vscode.ExtensionContext) {
 	revupInstance = new Revup();
 
 	registerOAuthConfigCommand(context, revupInstance);
-	registerOpenConfigCommand(context, revupInstance);
+	registerOpenRepoConfigCommand(context, revupInstance);
 	registerRevupUploadCommand(context, revupInstance);
 	registerRevupInstallCommand(context, revupInstance);
+	registerOpenGlobalConfigCommand(context, revupInstance);
+
+	// Try to install revup silently on activation
+	vscode.commands.executeCommand("revup.install", true);
 
 	registerRevupProviders(revupInstance.getTopics.bind(revupInstance));
 
