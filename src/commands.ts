@@ -37,8 +37,7 @@ export function registerOAuthConfigCommand(
 				// Open GitHub token creation page if user agrees
 				await vscode.env.openExternal(
 					vscode.Uri.parse(
-						"https://github.com/settings/tokens/new?scopes=repo",
-						true
+						"https://github.com/settings/tokens/new?scopes=repo"
 					)
 				);
 			}

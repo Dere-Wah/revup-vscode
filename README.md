@@ -25,10 +25,11 @@ currently working on finding a publisher), you can install it manually:
 
 ## Prerequisites
 
-This extension requires `revup` to be installed on your system. Please follow the
-installation instructions in the [revup README](https://github.com/skydio/revup)
-to set up the core tool first. If revup is not installed, the extension will try
-to automatically install it in your terminal.
+This extension requires `revup` to be installed on your system. Please follow
+the installation instructions in the
+[revup README](https://github.com/skydio/revup) to set up the core tool first.
+If revup is not installed, the extension will try to automatically install it in
+your terminal.
 
 ## Features
 
@@ -85,6 +86,14 @@ Please report any issues on the
 [GitHub repository](https://github.com/derewah/revup-vscode/issues).
 
 ## Release Notes
+
+### 0.0.3
+
+-   Auto installation on activation (skips if already installed)
+-   Split opening of Repo config or Global config
+-   Coloured keywords `topic`, `reviewers`, `relative`, auto-added in the
+    EDIT-COMMITMSG
+-   Better error logging when no repo or no remote is found.
 
 ### 0.0.1
 

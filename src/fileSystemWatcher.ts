@@ -58,7 +58,7 @@ export class CommitMessageWatcher {
 					// Replace the comment with our template
 					lines[1] = lines[1].replace(
 						"#",
-						"topic: \nrelative: \nreviewers: \n#"
+						"topic: \n#relative: \n#reviewers: \n#"
 					);
 
 					// Add the topic list after the template

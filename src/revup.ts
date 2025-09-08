@@ -82,8 +82,7 @@ export class Revup {
 				.filter((topic) => topic.length > 0);
 		} catch (error) {
 			console.error(
-				"Failed to get topics from revup:",
-				error instanceof Error ? error.message : String(error)
+				"Failed to get topics from revup. Does the remote exist?"
 			);
 		}
 	}
