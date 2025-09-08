@@ -107,10 +107,6 @@ Please report any issues on the
 
 The following features are currently being worked on:
 
--   **Auto Installation**: Automatic installation of revup during extension
-    setup
--   **VSCode Settings Integration**: Improved configuration interface that
-    integrates seamlessly with VSCode's native settings system
 -   **Extended Revup Features**: Additional functionality beyond the basic
     features:
     -   (More features to be announced)
