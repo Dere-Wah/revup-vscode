@@ -1,100 +1,116 @@
 {
-  "name": "revup-vscode",
-  "displayName": "Revup - Enhanced PR Workflow",
-  "description": "A VS Code extension for Skydio's revup tool that enhances your GitHub PR workflow with smart commit messages and topic management. Based on skydio/revup.",
-  "version": "0.0.2",
-  "engines": {
-    "vscode": "^1.80.0"
-  },
-  "categories": [
-    "Other",
-    "SCM"
-  ],
-  "homepage": "https://marketplace.visualstudio.com/items?itemName=derewah.revup-vscode",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Dere-Wah/revup-vscode.git"
-  },
-  "keywords": [
-    "git",
-    "github",
-    "pull-request",
-    "pr",
-    "commit",
-    "commit-message",
-    "revup",
-    "workflow",
-    "code-review",
-    "topics",
-    "branch-management",
-    "skydio",
-    "ghstack",
-    "git-branchstack",
-    "branchstack",
-    "branch-stack",
-    "git-revise",
-    "revise"
-  ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "icon": "icon.png",
-  "publisher": "derewah",
-  "main": "./out/extension.js",
-  "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "Revup Configuration",
-      "properties": {
-        "revup.revupConfiguration": {
-          "type": "null",
-          
-          "markdownDescription": "## [Open Repo Config](command:revup.openConfig)"
-        }
-      }
-    },
-    "commands": [
-      {
-        "command": "revup.configOAuth",
-        "title": "Revup: Configure Github OAuth Key"
-      },
-      {
-        "command": "revup.configBranchNamingStyle",
-        "title": "Revup: Configure Branch Naming Style"
-      },
-      {
-        "command": "revup.openConfig",
-        "title": "Revup: Open Configuration File"
-      },
-      {
-        "command": "revup.upload",
-        "title": "Revup: Revup Upload",
-        "icon": "$(cloud-upload)"
-      },
-      {
-        "command": "revup.install",
-        "title": "Revup: Install Revup",
-        "icon": "$(cloud-download)"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "pnpm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.80.0",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "typescript": "^5.8.3",
-    "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2"
-  }
+	"name": "revup-vscode",
+	"displayName": "Revup - Enhanced PR Workflow",
+	"description": "A VS Code extension for Skydio's revup tool that enhances your GitHub PR workflow with smart commit messages and topic management. Based on skydio/revup.",
+	"version": "0.0.2",
+	"engines": {
+		"vscode": "^1.80.0"
+	},
+	"categories": [
+		"Other",
+		"SCM"
+	],
+	"homepage": "https://marketplace.visualstudio.com/items?itemName=derewah.revup-vscode",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Dere-Wah/revup-vscode.git"
+	},
+	"keywords": [
+		"git",
+		"github",
+		"pull-request",
+		"pr",
+		"commit",
+		"commit-message",
+		"revup",
+		"workflow",
+		"code-review",
+		"topics",
+		"branch-management",
+		"skydio",
+		"ghstack",
+		"git-branchstack",
+		"branchstack",
+		"branch-stack",
+		"git-revise",
+		"revise"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"icon": "icon.png",
+	"publisher": "derewah",
+	"main": "./out/extension.js",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Revup Configuration",
+			"properties": {
+				"revup.revupConfiguration": {
+					"type": "null",
+					"markdownDescription": "## [Open Repo Config](command:revup.openConfig)"
+				}
+			}
+		},
+		"commands": [
+			{
+				"command": "revup.configOAuth",
+				"title": "Revup: Configure Github OAuth Key"
+			},
+			{
+				"command": "revup.configBranchNamingStyle",
+				"title": "Revup: Configure Branch Naming Style"
+			},
+			{
+				"command": "revup.openConfig",
+				"title": "Revup: Open Configuration File"
+			},
+			{
+				"command": "revup.upload",
+				"title": "Revup: Revup Upload",
+				"icon": "$(cloud-upload)"
+			},
+			{
+				"command": "revup.install",
+				"title": "Revup: Install Revup",
+				"icon": "$(cloud-download)"
+			}
+		],
+		"semanticTokenTypes": [
+			{
+				"id": "topic",
+				"superType": "keywords",
+				"description": "Topic lines in commit messages"
+			},
+			{
+				"id": "relative",
+				"superType": "keywords",
+				"description": "Relative lines in commit messages"
+			},
+			{
+				"id": "reviewers",
+				"superType": "keywords",
+				"description": "Reviewers lines in commit messages"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "pnpm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "pnpm run compile && pnpm run lint",
+		"lint": "eslint src",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.80.0",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "20.x",
+		"@typescript-eslint/eslint-plugin": "^8.31.1",
+		"@typescript-eslint/parser": "^8.31.1",
+		"eslint": "^9.25.1",
+		"typescript": "^5.8.3",
+		"@vscode/test-cli": "^0.0.11",
+		"@vscode/test-electron": "^2.5.2"
+	}
 }

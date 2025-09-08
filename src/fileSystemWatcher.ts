@@ -56,7 +56,10 @@ export class CommitMessageWatcher {
 					const formattedTopics = this.formatTopicList(topics);
 
 					// Replace the comment with our template
-					lines[1] = lines[1].replace("#", "topic: \n#relative: \n#");
+					lines[1] = lines[1].replace(
+						"#",
+						"topic: \nrelative: \nreviewers: \n#"
+					);
 
 					// Add the topic list after the template
 					if (topics.length > 0) {
