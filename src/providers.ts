@@ -4,12 +4,12 @@ import * as vscode from "vscode";
 const tokenTypes = new Map<string, number>();
 const tokenModifiers = new Map<string, number>();
 
-const legend = new vscode.SemanticTokensLegend(["topic"], []);
+const legend = new vscode.SemanticTokensLegend(
+	["topic", "relative", "reviewers"],
+	[]
+);
 
-const COMMIT_MSG_SELECTOR = {
-	scheme: "file",
-	pattern: "**/.git/COMMIT_EDITMSG",
-};
+const COMMIT_MSG_SELECTOR = { language: "git-commit" };
 
 export const registerRevupProviders = (getTopics: () => string[]) => {
 	// Register topic completions provider
@@ -108,6 +108,24 @@ export const registerRevupProviders = (getTopics: () => string[]) => {
 					const length = text.length - startIndex; // Highlight to the end of line
 					tokensBuilder.push(i, startIndex, length, 0); // 0 is the index of 'topic' in the legend
 				}
+
+				// Match relative: or # relative: lines
+				const relativeMatch = text.match(/^(?:#\s*)?relative:\s*(.*)$/);
+				if (relativeMatch) {
+					const startIndex = text.indexOf("relative:");
+					const length = text.length - startIndex; // Highlight to the end of line
+					tokensBuilder.push(i, startIndex, length, 1); // 1 is the index of 'relative' in the legend
+				}
+
+				// Match reviewers: or # reviewers: lines
+				const reviewersMatch = text.match(
+					/^(?:#\s*)?reviewers:\s*(.*)$/
+				);
+				if (reviewersMatch) {
+					const startIndex = text.indexOf("reviewers:");
+					const length = text.length - startIndex; // Highlight to the end of line
+					tokensBuilder.push(i, startIndex, length, 2); // 2 is the index of 'reviewers' in the legend
+				}
 			}
 
 			return tokensBuilder.build();
@@ -121,14 +139,52 @@ export const registerRevupProviders = (getTopics: () => string[]) => {
 			semanticTokensProvider,
 			legend
 		);
+	// Detect current theme and set appropriate colors
+	const currentTheme = vscode.window.activeColorTheme.kind;
+	const isDarkTheme =
+		currentTheme === vscode.ColorThemeKind.Dark ||
+		currentTheme === vscode.ColorThemeKind.HighContrast;
 
-	// Set the color for the 'topic' token type
+	// Define colors based on theme for better contrast
+	const colors = {
+		topic: {
+			// yellow/orange colors
+			dark: "#f39c12", // bright orange for dark themes
+			light: "#e67e22", // darker orange for light themes
+		},
+		relative: {
+			// blue/cyan colors
+			dark: "#3498db", // bright blue for dark themes
+			light: "#2980b9", // darker blue for light themes
+		},
+		reviewers: {
+			// red colors
+			dark: "#e74c3c", // bright red for dark themes
+			light: "#c0392b", // darker red for light themes
+		},
+	};
+
+	// Set the colors for the token types
 	void vscode.workspace.getConfiguration().update(
 		"editor.semanticTokenColorCustomizations",
 		{
 			rules: {
 				topic: {
-					foreground: "${editor.symbolHighlight.foreground}",
+					foreground: isDarkTheme
+						? colors.topic.dark
+						: colors.topic.light, // yellow/orange in most themes
+					bold: true,
+				},
+				relative: {
+					foreground: isDarkTheme
+						? colors.relative.dark
+						: colors.relative.light, // blue/cyan in most themes
+					bold: true,
+				},
+				reviewers: {
+					foreground: isDarkTheme
+						? colors.reviewers.dark
+						: colors.reviewers.light, // red in all themes
 					bold: true,
 				},
 			},
