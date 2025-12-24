@@ -1,1 +1,2 @@
 Middle layer content - commit 1
+Middle layer more content - commit 2
