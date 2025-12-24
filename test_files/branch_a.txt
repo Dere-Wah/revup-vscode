@@ -1,1 +1,2 @@
 Branch A content - commit 1
+Branch A additional content - commit 2
