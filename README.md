@@ -35,36 +35,36 @@ your terminal.
 
 ### 1. VSCode Commands
 
--   **Configure GitHub OAuth Token** (`revup.configOAuth`): Set up your GitHub
-    OAuth token for authentication
--   **Open Repo Configuration File** (`revup.openRepoConfig`): Quick access to
-    your Repo revup configuration
--   **Open Global Configuration File** (`revup.openGlobalConfig`): Quick access
-    your Global revup configuration
--   **Revup Upload** (`revup.upload`): Trigger revup upload directly from VS
-    Code
--   **Revup Install** (`revup.install`): Automatically install revup.
+- **Configure GitHub OAuth Token** (`revup.configOAuth`): Set up your GitHub
+  OAuth token for authentication
+- **Open Repo Configuration File** (`revup.openRepoConfig`): Quick access to
+  your Repo revup configuration
+- **Open Global Configuration File** (`revup.openGlobalConfig`): Quick access
+  your Global revup configuration
+- **Revup Upload** (`revup.upload`): Trigger revup upload directly from VS
+  Code
+- **Revup Install** (`revup.install`): Automatically install revup.
 
 ### 2. Smart Commit Messages
 
 <img width="747" height="327" alt="image" src="https://github.com/user-attachments/assets/d8ff55c1-747d-4587-b88e-5918926b72b2" />
 
--   Automatically templates your COMMIT_EDITMSG file when creating a new commit
--   Adds the current topic and relative key ready to use
--   Displays all active topics in your repository for reference
+- Automatically templates your COMMIT_EDITMSG file when creating a new commit
+- Adds the current topic and relative key ready to use
+- Displays all active topics in your repository for reference
 
 ### 3. Commit Message Auto-completion
 
 ![auto](https://github.com/user-attachments/assets/875e5e5b-a26d-423d-9784-427514fe0fb7)
 
--   Intelligent auto-completion for commit messages
--   Suggests topics based on your repository's active topics
--   Makes it easier to maintain consistent commit message formatting
+- Intelligent auto-completion for commit messages
+- Suggests topics based on your repository's active topics
+- Makes it easier to maintain consistent commit message formatting
 
 ### 4. Quick Access Status Bar
 
--   Convenient status bar item for quick access to revup upload
--   Visual indicator for revup integration status
+- Convenient status bar item for quick access to revup upload
+- Visual indicator for revup integration status
 
 ## Requirements
 
@@ -79,7 +79,7 @@ your terminal.
 
 This extension contributes the following settings through VS Code's settings:
 
--   `revup.revupConfiguration`: Access and modify your revup configuration
+- `revup.revupConfiguration`: Access and modify your revup configuration
 
 ## Known Issues
 
@@ -88,26 +88,30 @@ Please report any issues on the
 
 ## Release Notes
 
+### 0.0.4
+
+- In the COMMITMSG the list of modified files, each file also shows the last topic where it was modified.
+
 ### 0.0.3
 
--   Auto installation on activation (skips if already installed)
--   Split opening of Repo config or Global config
--   Coloured keywords `topic`, `reviewers`, `relative`, auto-added in the
-    EDIT-COMMITMSG
--   Better error logging when no repo or no remote is found.
+- Auto installation on activation (skips if already installed)
+- Split opening of Repo config or Global config
+- Coloured keywords `topic`, `reviewers`, `relative`, auto-added in the
+  EDIT-COMMITMSG
+- Better error logging when no repo or no remote is found.
 
 ### 0.0.1
 
--   Initial release
--   Basic integration with revup
--   Commit message templating
--   Topic-aware auto-completion
--   Status bar integration
+- Initial release
+- Basic integration with revup
+- Commit message templating
+- Topic-aware auto-completion
+- Status bar integration
 
 ## Upcoming Features
 
 The following features are currently being worked on:
 
--   **Extended Revup Features**: Additional functionality beyond the basic
-    features:
-    -   (More features to be announced)
+- **Extended Revup Features**: Additional functionality beyond the basic
+  features:
+  - (More features to be announced)
